@@ -18,6 +18,14 @@ thread_local! {
     static CORE: Mutex<Core> = Mutex::new(Core::new().unwrap());
 }
 
+pub fn request_core_run<F>(f: F) -> Result<F::Item, F::Error> 
+    where F: futures::future::Future,
+{
+    CORE.with(|c| {
+        c.lock().unwrap().run(f)
+    })
+}
+
 impl<'a, 'r> rocket::request::FromRequest<'a, 'r> for Handle {
     type Error = ();
 
@@ -38,6 +46,15 @@ impl From<Handle> for tokio_core::reactor::Handle {
 }
 
 pub struct Future<I, E>(pub Box<futures::future::Future<Item = I, Error = E>>);
+
+impl<I, E> futures::future::Future for Future<I, E> {
+    type Item = I;
+    type Error = E;
+
+    fn poll(&mut self) -> futures::Poll<Self::Item, Self::Error> {
+        self.0.poll()
+    }
+}
 
 impl<'r, I, E> rocket::response::Responder<'r> for Future<I, E>
     where Result<I, E>: Responder<'r>,
