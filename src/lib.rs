@@ -36,7 +36,7 @@ thread_local! {
 ///
 /// Run a future to completion. This will block the handling of the current request until the
 /// future resolves.
-pub fn request_core_run<F>(f: F) -> Result<F::Item, F::Error>
+pub fn run<F>(f: F) -> Result<F::Item, F::Error>
 where
     F: futures::future::Future,
 {

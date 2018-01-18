@@ -22,7 +22,7 @@ fn it_works() {
 fn mid_request_future() -> String {
     let s = future_string();
 
-    request_core_run(s).unwrap()
+    run(s).unwrap()
 }
 
 #[test]
