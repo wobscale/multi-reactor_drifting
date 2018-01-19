@@ -1,0 +1,16 @@
+[package]
+name = "multi-reactor_drifting"
+version = "0.1.0"
+authors = ["Euan Kemp <euank@euank.com>"]
+
+[dependencies]
+tokio-core = "0.1"
+futures = "0.1"
+rocket = "0.3"
+
+[dev-dependencies]
+# tests
+rocket_codegen = "0.3"
+
+# examples
+hyper = "0.11"
